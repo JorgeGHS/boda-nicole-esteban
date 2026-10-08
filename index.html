@@ -155,6 +155,10 @@ fieldset{border:0}
 .code code{flex:1;font-family:var(--sans);font-size:14px;letter-spacing:.12em;padding:12px 14px;word-break:break-all;color:var(--cafe)}
 .copy{-webkit-appearance:none;appearance:none;border:0;border-left:1px dashed var(--camel);background:transparent;padding:0 16px;font-family:var(--sans);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--terra);cursor:pointer;min-width:104px;transition:background .25s,color .25s;-webkit-user-select:none;user-select:none;touch-action:manipulation}
 .copy:focus{outline:none}.copy:focus-visible{outline:2px solid var(--terra);outline-offset:2px}
+.copy.press,.copy-all.press{transform:scale(.96)}
+.copy,.copy-all{transition:background .2s,color .2s,transform .15s}
+.copy.fail,.copy-all.fail{background:var(--cafe)!important;color:var(--paper)!important;border-color:var(--cafe)!important}
+.code code,.bank-row span{-webkit-user-select:all;user-select:all}
 .copy.ok{background:var(--terra)!important;color:var(--paper)!important;border-color:var(--terra)!important}
 @media (hover:hover){.copy:hover{background:var(--sand)}}
 .hotel .how{font-size:14px;color:var(--ink-soft);margin-top:14px}
@@ -206,7 +210,7 @@ fieldset{border:0}
 .bank-row span{display:block}
 .gcard.bank .bank-row span{font-size:19px;line-height:1.35}
 .copy-all{width:100%;justify-content:center;margin-top:18px;min-height:50px;-webkit-appearance:none;appearance:none;touch-action:manipulation}
-.copy-all.ok{background:var(--terra);border-color:var(--terra);color:var(--paper)}
+.copy-all.ok{background:var(--terra)!important;border-color:var(--terra)!important;color:var(--paper)!important}
 .intl{margin-top:18px;border-top:1px solid var(--line);padding-top:6px}
 .intl summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;min-height:48px;font-family:var(--serif);font-size:20px;color:var(--cafe)}
 .intl summary::-webkit-details-marker{display:none}
@@ -247,7 +251,7 @@ footer .tiny{margin-top:60px;font-size:11px;letter-spacing:.2em;text-transform:u
 .rv.d1{transition-delay:.12s}.rv.d2{transition-delay:.24s}.rv.d3{transition-delay:.36s}
 @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.scroll-cue{display:none}html{scroll-behavior:auto}}
 
-.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:var(--ink);color:var(--paper);font-size:12px;letter-spacing:.2em;text-transform:uppercase;padding:13px 22px;opacity:0;pointer-events:none;transition:all .35s;z-index:200}
+.toast{position:fixed;left:50%;bottom:28px;white-space:nowrap;max-width:calc(100vw - 28px);text-align:center;letter-spacing:.14em!important;transform:translate(-50%,20px);background:var(--ink);color:var(--paper);font-size:12px;letter-spacing:.2em;text-transform:uppercase;padding:13px 22px;opacity:0;pointer-events:none;transition:all .35s;z-index:200}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
 /* RESPONSIVE */
@@ -745,29 +749,51 @@ tick();setInterval(tick,1000);
 /* COPY */
 const toast=document.getElementById('toast');
 function showToast(t){toast.textContent=t;toast.classList.add('show');clearTimeout(showToast.t);showToast.t=setTimeout(()=>toast.classList.remove('show'),1800)}
-async function copyText(v){
-  try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(v);return true}}catch(e){}
-  const t=document.createElement('textarea');t.value=v;t.setAttribute('readonly','');
-  t.style.cssText='position:fixed;top:0;left:0;opacity:0;font-size:16px;pointer-events:none';
-  document.body.appendChild(t);t.focus({preventScroll:true});t.select();t.setSelectionRange(0,v.length);
-  let ok=false;try{ok=document.execCommand('copy')}catch(e){}
-  t.remove();window.getSelection&&window.getSelection().removeAllRanges();
+/* COPIAR: respuesta visual inmediata + copia que nunca se queda colgada */
+const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+function copySync(v){
+  const ta=document.createElement('textarea');
+  ta.value=v;ta.setAttribute('readonly','');ta.contentEditable='true';
+  ta.style.cssText='position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;font-size:16px;border:0;padding:0';
+  document.body.appendChild(ta);
+  let ok=false;
+  try{
+    if(isIOS){const r=document.createRange();r.selectNodeContents(ta);const sel=getSelection();sel.removeAllRanges();sel.addRange(r);ta.setSelectionRange(0,v.length)}
+    else ta.select();
+    ok=document.execCommand('copy');
+  }catch(e){}
+  ta.remove();try{getSelection().removeAllRanges()}catch(e){}
   return ok;
 }
-function flash(b,label){
-  const orig=b.dataset.label||(b.dataset.label=b.textContent);
-  b.textContent=label;b.classList.add('ok');b.blur();
-  clearTimeout(b._t);b._t=setTimeout(()=>{b.textContent=orig;b.classList.remove('ok')},1800);
+function copyAsync(v){
+  if(!navigator.clipboard||!navigator.clipboard.writeText)return Promise.resolve(false);
+  return Promise.race([
+    navigator.clipboard.writeText(v).then(()=>true,()=>false),
+    new Promise(r=>setTimeout(()=>r(false),900))
+  ]);
 }
-document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',async()=>{
-  const ok=await copyText(b.dataset.copy.replace(/\s/g,''));
-  flash(b,ok?'¡Copiado!':'Mantén pulsado');
-  if(!ok)showToast('Mantén pulsado el texto para copiarlo');
-}));
-document.querySelectorAll('[data-copy-all]').forEach(b=>b.addEventListener('click',async()=>{
+function setBtn(b,label,state){
+  if(!b.dataset.label)b.dataset.label=b.textContent;
+  b.textContent=label;b.classList.remove('ok','fail');if(state)b.classList.add(state);
+  clearTimeout(b._t);
+  if(state)b._t=setTimeout(()=>{b.textContent=b.dataset.label;b.classList.remove('ok','fail')},2200);
+}
+function selectVisible(b){
+  const el=b.closest('.code,.bank-row')&&b.closest('.code,.bank-row').querySelector('code,span');
+  if(!el)return;const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);
+}
+async function doCopy(b,v,okLabel){
+  b.classList.add('press');setTimeout(()=>b.classList.remove('press'),180);
+  if(copySync(v)){setBtn(b,okLabel,'ok');showToast('Copiado al portapapeles');return}
+  setBtn(b,'Copiando…');
+  if(await copyAsync(v)){setBtn(b,okLabel,'ok');showToast('Copiado al portapapeles');return}
+  setBtn(b,'Mantén pulsado','fail');selectVisible(b);showToast('Mantén pulsado el texto para copiarlo');
+}
+document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();doCopy(b,b.dataset.copy.replace(/\s/g,''),'¡Copiado!')}));
+document.querySelectorAll('[data-copy-all]').forEach(b=>b.addEventListener('click',e=>{
+  e.preventDefault();
   const rows=[...document.querySelectorAll('.gcard.bank .bank-row')].map(r=>r.querySelector('small').textContent+': '+r.querySelector('span').textContent);
-  const ok=await copyText(rows.join('\n'));
-  flash(b,ok?'¡Datos copiados!':'No se pudo copiar');
+  doCopy(b,rows.join('\n'),'¡Datos copiados!');
 }));
 
 /* CALENDARIO */
