@@ -111,13 +111,17 @@ nav.open .burger i:nth-child(2){transform:translateY(-4.5px) rotate(-45deg)}
 
 /* EVENTS */
 .events-head{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end;margin-bottom:64px}
-.events{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}
+.events{display:grid;grid-template-columns:1fr 2fr;border-top:1px solid var(--line)}
 .event{padding:44px 34px 40px 0;border-right:1px solid var(--line);position:relative}
 .event + .event{padding-left:34px}
 .event:last-child{border-right:0}
 .event .day{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--terra)}
-.event .time{font-family:var(--serif);font-size:64px;font-weight:300;line-height:1;margin:18px 0 12px}
-.event h3{margin-bottom:10px}
+.event .day-title{font-size:40px;font-weight:300;font-style:italic;color:var(--terra);margin:10px 0 0}
+.moments{display:grid;grid-template-columns:1fr 1fr;gap:0 34px}
+.moment{padding-top:22px}
+.moment + .moment{border-left:1px solid var(--line);padding-left:34px}
+.moment h4{font-family:var(--serif);font-size:28px;font-weight:400;line-height:1.1;margin-bottom:10px}
+.event .time{font-family:var(--serif);font-size:64px;font-weight:300;line-height:1;margin:6px 0 12px}
 .event p{color:var(--ink-soft);font-size:15px;margin-bottom:22px}
 .event .tbd{font-family:var(--serif);font-style:italic;color:var(--camel);font-size:19px}
 .event-actions{display:flex;flex-wrap:wrap;gap:18px}
@@ -211,7 +215,7 @@ fieldset{border:0}
 .gifts{text-align:center}
 .gifts .lead{margin:0 auto}
 .gifts .rule{margin:30px auto}
-.gift-cards{display:grid;grid-template-columns:1fr 1.4fr;gap:20px;max-width:900px;margin:50px auto 0;text-align:left}
+.gift-cards{display:grid;grid-template-columns:1fr;gap:20px;max-width:600px;margin:50px auto 0;text-align:left}
 .gcard{border:1px solid var(--line);padding:34px}
 .gcard .eyebrow{display:block;margin-bottom:14px}
 .gcard h3{margin-bottom:6px}
@@ -282,6 +286,8 @@ footer .tiny{margin-top:60px;font-size:11px;letter-spacing:.2em;text-transform:u
   .burger i{left:10px;right:10px}.burger i:nth-child(1){top:17px}.burger i:nth-child(2){top:26px}
   .events{grid-template-columns:1fr}
   .event,.event + .event{padding:36px 0;border-right:0;border-bottom:1px solid var(--line)}
+  .moments{grid-template-columns:1fr}
+  .moment + .moment{border-left:0;padding-left:0;margin-top:30px;padding-top:30px;border-top:1px dashed var(--line)}
   .beauty-grid{grid-template-columns:1fr 1fr}
   .rsvp .wrap,.stay .wrap,.events-head,.route-head{grid-template-columns:1fr;gap:28px}
   .events-head,.route-head{margin-bottom:40px}
@@ -321,6 +327,7 @@ footer .tiny{margin-top:60px;font-size:11px;letter-spacing:.2em;text-transform:u
   .event-actions,.artist .acts,.hotel-acts{gap:10px}
   .event-actions .link,.artist .acts .link,.hotel-acts .link{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border:1px solid var(--camel);font-size:11px;letter-spacing:.18em;color:var(--cafe);background:rgba(244,238,230,.6)}
   .event .time{font-size:56px}
+  .event .day-title{font-size:36px}
 
   .dress{grid-template-columns:1fr;gap:12px;padding:32px 26px;margin-top:48px}
 
@@ -379,7 +386,7 @@ footer .tiny{margin-top:60px;font-size:11px;letter-spacing:.2em;text-transform:u
     <ul class="navlinks" id="navlinks">
       <li><a href="#celebracion">La boda</a></li>
       <li><a href="#confirmar">Confirmar</a></li>
-      <li><a href="#alojamiento">Alojamiento</a></li>
+      <li><a href="#alojamiento">Hospedaje</a></li>
       <li><a href="#belleza">Peinado y maquillaje</a></li>
       <li><a href="#ruta">Nuestra ruta</a></li>
       <li><a href="#regalos">Regalos</a></li>
@@ -414,8 +421,8 @@ footer .tiny{margin-top:60px;font-size:11px;letter-spacing:.2em;text-transform:u
 <section class="intro">
   <div class="wrap">
     <div class="flags rv">México · Madrid</div>
-    <p class="quote rv d1">Nos conocimos en Madrid, aquí formamos nuestra familia y aquí queremos celebrarlo. Ahora somos tres y con <em>baby Nico</em> os esperamos para el día más especial de nuestras vidas.</p>
-    <p class="sign rv d2">Nicole, Esteban &amp; Nico</p>
+    <p class="quote rv d1">Nos conocimos en Madrid, aquí hicimos nuestra vida y aquí queremos celebrarlo. Nada nos haría más felices que <em>tenerlos con nosotros</em> en el día más especial de nuestras vidas.</p>
+    <p class="sign rv d2">Nicole &amp; Esteban</p>
   </div>
 </section>
 
@@ -424,37 +431,43 @@ footer .tiny{margin-top:60px;font-size:11px;letter-spacing:.2em;text-transform:u
     <div class="events-head">
       <div>
         <p class="eyebrow rv">Fecha y lugar</p>
-        <h2 class="rv d1">Tres momentos, <em>un mismo</em> fin de semana</h2>
+        <h2 class="rv d1">Dos días para <em>celebrar</em></h2>
       </div>
-      <p class="lead rv d2">Empezamos el jueves con un rompehielos para conocernos todos, y el sábado nos damos el «sí, quiero».</p>
+      <p class="lead rv d2">El jueves los esperamos en un rompehielos para conocernos y brindar juntos, y el sábado nos damos el «sí, acepto».</p>
     </div>
 
     <div class="events">
       <article class="event rv">
         <p class="day">Jueves · 15 de abril</p>
-        <p class="time">19:30</p>
-        <h3>Rompehielos</h3>
-        <p>Una noche para brindar, presentaros y empezar la celebración.</p>
-        <p class="tbd">Lugar por confirmar</p>
+        <h3 class="day-title">Rompehielos</h3>
+        <div class="moment">
+          <p class="time">19:30</p>
+          <p>Una noche para brindar, conocernos y empezar la fiesta.</p>
+          <p class="tbd">Lugar por confirmar</p>
+        </div>
       </article>
       <article class="event rv d1">
         <p class="day">Sábado · 17 de abril</p>
-        <p class="time">12:30</p>
-        <h3>Misa</h3>
-        <p>Parroquia de La Milagrosa<br>Calle García de Paredes, 45 · Chamberí, 28010 Madrid</p>
-        <div class="event-actions">
-          <a class="link" href="https://www.google.com/maps/search/?api=1&amp;query=Parroquia+de+la+Milagrosa%2C+Calle+de+Garc%C3%ADa+de+Paredes+45%2C+28010+Madrid" target="_blank" rel="noopener">Cómo llegar</a>
-          <button type="button" class="link cal-open" data-cal="misa">Añadir al calendario</button>
-        </div>
-      </article>
-      <article class="event rv d2">
-        <p class="day">Sábado · 17 de abril</p>
-        <p class="time">Después</p>
-        <h3>Celebración</h3>
-        <p>La Quinta del Jarama<br>A-1, Carretera de Burgos, km 26 · 28702 Madrid</p>
-        <div class="event-actions">
-          <a class="link" href="https://www.google.com/maps/search/?api=1&amp;query=La+Quinta+del+Jarama%2C+A-1+km+26%2C+28702+San+Sebasti%C3%A1n+de+los+Reyes%2C+Madrid" target="_blank" rel="noopener">Cómo llegar</a>
-          <button type="button" class="link cal-open" data-cal="fiesta">Añadir al calendario</button>
+        <h3 class="day-title">La boda</h3>
+        <div class="moments">
+          <div class="moment">
+            <p class="time">12:30</p>
+            <h4>Misa</h4>
+            <p>Parroquia de La Milagrosa<br>Calle García de Paredes, 45 · Chamberí, 28010 Madrid</p>
+            <div class="event-actions">
+              <a class="link" href="https://www.google.com/maps/search/?api=1&amp;query=Parroquia+de+la+Milagrosa%2C+Calle+de+Garc%C3%ADa+de+Paredes+45%2C+28010+Madrid" target="_blank" rel="noopener">Cómo llegar</a>
+              <button type="button" class="link cal-open" data-cal="misa">Agregar al calendario</button>
+            </div>
+          </div>
+          <div class="moment">
+            <p class="time">Después</p>
+            <h4>Celebración</h4>
+            <p>La Quinta del Jarama<br>A-1, Carretera de Burgos, km 26 · 28702 Madrid</p>
+            <div class="event-actions">
+              <a class="link" href="https://www.google.com/maps/search/?api=1&amp;query=La+Quinta+del+Jarama%2C+A-1+km+26%2C+28702+San+Sebasti%C3%A1n+de+los+Reyes%2C+Madrid" target="_blank" rel="noopener">Cómo llegar</a>
+              <button type="button" class="link cal-open" data-cal="fiesta">Agregar al calendario</button>
+            </div>
+          </div>
         </div>
       </article>
     </div>
@@ -464,7 +477,7 @@ footer .tiny{margin-top:60px;font-size:11px;letter-spacing:.2em;text-transform:u
         <p class="eyebrow">Dress code</p>
         <h3>Formal</h3>
       </div>
-      <p>Queremos veros guapísimos. En Madrid, a mediados de abril, las tardes pueden refrescar: un abrigo o un chal ligero nunca sobra.</p>
+      <p>Queremos verlos muy guapos. En Madrid, a mediados de abril, las noches pueden ser frescas: un abrigo o un chal ligero nunca está de más.</p>
     </div>
   </div>
 </section>
@@ -473,44 +486,44 @@ footer .tiny{margin-top:60px;font-size:11px;letter-spacing:.2em;text-transform:u
   <div class="wrap">
     <div>
       <p class="eyebrow rv">Confirmación</p>
-      <h2 class="rv d1">¿Nos <em>acompañas</em>?</h2>
-      <p class="lead rv d2">Nos ayudaría muchísimo saber cuanto antes si vas a poder venir. Rellena el formulario por cada invitado.</p>
-      <div class="deadline rv d3">Confirma antes del<b>1 de febrero de 2027</b></div>
+      <h2 class="rv d1">¿Nos <em>acompaña</em>?</h2>
+      <p class="lead rv d2">Nos ayudaría muchísimo saber lo antes posible si podrá acompañarnos. Por favor, llene el formulario por cada invitado.</p>
+      <div class="deadline rv d3">Confirme antes del<b>1 de febrero de 2027</b></div>
     </div>
 
     <div>
       <form id="rsvp-form" class="rv d1" novalidate>
         <div class="field">
           <label for="f-nombre">Nombre y apellido</label>
-          <input type="text" id="f-nombre" name="nombre" placeholder="Tu nombre completo" required autocomplete="name" autocapitalize="words">
+          <input type="text" id="f-nombre" name="nombre" placeholder="Su nombre completo" required autocomplete="name" autocapitalize="words">
         </div>
         <div class="field">
-          <label for="f-email">Email</label>
-          <input type="email" id="f-email" name="email" placeholder="tu@email.com" required autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false">
+          <label for="f-email">Correo electrónico</label>
+          <input type="email" id="f-email" name="email" placeholder="su@correo.com" required autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false">
         </div>
         <fieldset class="field">
-          <legend>¿Asistirás a la boda?</legend>
+          <legend>¿Asistirá a la boda?</legend>
           <div class="choices">
-            <input type="radio" name="boda" id="b-si" value="Sí, allí estaré" required><label for="b-si">Sí, allí estaré</label>
+            <input type="radio" name="boda" id="b-si" value="Sí, ahí estaré" required><label for="b-si">Sí, ahí estaré</label>
             <input type="radio" name="boda" id="b-no" value="No podré ir"><label for="b-no">No podré ir</label>
           </div>
         </fieldset>
         <fieldset class="field">
-          <legend>¿Asistirás al rompehielos?</legend>
+          <legend>¿Asistirá al rompehielos?</legend>
           <div class="choices">
-            <input type="radio" name="rompehielos" id="r-si" value="Sí, allí estaré" required><label for="r-si">Sí, allí estaré</label>
+            <input type="radio" name="rompehielos" id="r-si" value="Sí, ahí estaré" required><label for="r-si">Sí, ahí estaré</label>
             <input type="radio" name="rompehielos" id="r-no" value="No podré ir"><label for="r-no">No podré ir</label>
           </div>
         </fieldset>
         <fieldset class="field">
-          <legend>¿Traerás acompañante (+1)?</legend>
+          <legend>¿Traerá acompañante (+1)?</legend>
           <div class="choices">
             <input type="radio" name="acompanante" id="a-si" value="Sí" required><label for="a-si">Sí</label>
             <input type="radio" name="acompanante" id="a-no" value="No"><label for="a-no">No</label>
           </div>
         </fieldset>
         <div class="field plusone" id="plusone">
-          <label for="f-plus">Nombre de tu acompañante</label>
+          <label for="f-plus">Nombre de su acompañante</label>
           <input type="text" id="f-plus" name="nombreAcompanante" placeholder="Nombre y apellido" autocapitalize="words">
         </div>
         <p class="form-msg" id="form-msg" role="status"></p>
@@ -518,7 +531,7 @@ footer .tiny{margin-top:60px;font-size:11px;letter-spacing:.2em;text-transform:u
       </form>
       <div class="thanks" id="thanks" role="status">
         <h3>¡Gracias!</h3>
-        <p class="lead" id="thanks-text">Hemos recibido tu confirmación.</p>
+        <p class="lead" id="thanks-text">Recibimos su confirmación.</p>
       </div>
       <iframe name="gform-target" id="gform-target" title="envío" style="display:none"></iframe>
     </div>
@@ -528,28 +541,28 @@ footer .tiny{margin-top:60px;font-size:11px;letter-spacing:.2em;text-transform:u
 <section class="stay" id="alojamiento">
   <div class="wrap">
     <div>
-      <p class="eyebrow rv">Alojamiento</p>
-      <h2 class="rv d1">Dónde <em>quedarse</em></h2>
-      <p class="lead rv d2">Os recomendamos alojaros en el centro de Madrid: zonas céntricas, con muchísimos restaurantes, museos, tiendas y rincones para pasear y disfrutar de la ciudad.</p>
+      <p class="eyebrow rv">Hospedaje</p>
+      <h2 class="rv d1">Dónde <em>hospedarse</em></h2>
+      <p class="lead rv d2">Les recomendamos hospedarse en el centro de Madrid: zonas con muchísimos restaurantes, museos, tiendas y rincones para pasear y disfrutar la ciudad.</p>
       <div class="zones rv d2"><span>Salamanca</span><span>Justicia</span><span>Retiro</span><span>Chamberí</span></div>
-      <div class="distance rv d3"><b>35′</b><span>en coche aproximadamente desde el centro de Madrid hasta La Quinta del Jarama.</span></div>
+      <div class="distance rv d3"><b>35′</b><span>en auto, aproximadamente, del centro de Madrid a La Quinta del Jarama.</span></div>
     </div>
     <div>
       <p class="eyebrow rv" style="margin-bottom:22px">Hoteles con convenio</p>
       <article class="hotel rv d1">
         <div class="off">10%<small>descuento</small></div>
         <h3>H10 Puerta de Alcalá</h3>
-        <p class="where">A 10 minutos en coche de la iglesia</p>
+        <p class="where">A 10 minutos en auto de la iglesia</p>
         <div class="code"><code>NyE170426</code><button class="copy" data-copy="NyE170426">Copiar</button></div>
-        <p class="how">Introduce el código al reservar en su web.</p>
+        <p class="how">Ingrese el código al reservar en su página web.</p>
         <div class="hotel-acts"><a class="link" href="https://www.h10hotels.com/es/hoteles-madrid/h10-puerta-de-alcala" target="_blank" rel="noopener">Ver hotel y reservar</a></div>
       </article>
       <article class="hotel rv d2">
         <div class="off">10%<small>descuento</small></div>
         <h3>Hotel El Sardinero Alonso Martínez</h3>
-        <p class="where">A 5 minutos en coche de la iglesia</p>
+        <p class="where">A 5 minutos en auto de la iglesia</p>
         <div class="code"><code>BODANICOLEYESTEBANABRIL2027</code><button class="copy" data-copy="BODANICOLEYESTEBANABRIL2027">Copiar</button></div>
-        <p class="how">Reserva escribiendo a <a href="mailto:madrid-reservas@sardinerohoteles.com?subject=Reserva%20boda%20Nicole%20y%20Esteban%20-%20c%C3%B3digo%20BODANICOLEYESTEBANABRIL2027&body=A%20la%20atenci%C3%B3n%20de%20Gregori%20Mayor%3A%0A%0A">madrid-reservas@sardinerohoteles.com</a>, a la atención de Gregori Mayor, indicando el código.</p>
+        <p class="how">Reserve escribiendo a <a href="mailto:madrid-reservas@sardinerohoteles.com?subject=Reserva%20boda%20Nicole%20y%20Esteban%20-%20c%C3%B3digo%20BODANICOLEYESTEBANABRIL2027&body=A%20la%20atenci%C3%B3n%20de%20Gregori%20Mayor%3A%0A%0A">madrid-reservas@sardinerohoteles.com</a>, a la atención de Gregori Mayor, indicando el código.</p>
         <div class="hotel-acts"><a class="link" href="https://www.hotelsardineromadrid.com/" target="_blank" rel="noopener">Ver hotel</a><a class="link" href="mailto:madrid-reservas@sardinerohoteles.com?subject=Reserva%20boda%20Nicole%20y%20Esteban%20-%20c%C3%B3digo%20BODANICOLEYESTEBANABRIL2027&body=A%20la%20atenci%C3%B3n%20de%20Gregori%20Mayor%3A%0A%0A">Escribir para reservar</a></div>
       </article>
     </div>
@@ -560,12 +573,12 @@ footer .tiny{margin-top:60px;font-size:11px;letter-spacing:.2em;text-transform:u
   <div class="wrap">
     <p class="eyebrow rv">Peinado y maquillaje</p>
     <h2 class="rv d1">Para estar <em>perfectas</em></h2>
-    <p class="lead rv d2">Algunos profesionales de confianza en Madrid. Os recomendamos reservar con tiempo.</p>
+    <p class="lead rv d2">Algunos profesionales de confianza en Madrid. Les recomendamos reservar con tiempo.</p>
     <div class="beauty-grid">
       <article class="artist rv">
         <span class="n">i.</span>
         <h3>Hola Pepa</h3>
-        <p class="tag">Peluquería<br><em>Se desplaza a tu alojamiento</em></p>
+        <p class="tag">Peinado<br><em>Va a su hotel</em></p>
         <div class="acts">
           <a class="link" href="https://wa.me/34663202896" target="_blank" rel="noopener">WhatsApp</a>
           <a class="link" href="tel:+34663202896">Llamar</a>
@@ -575,7 +588,7 @@ footer .tiny{margin-top:60px;font-size:11px;letter-spacing:.2em;text-transform:u
       <article class="artist rv d1">
         <span class="n">ii.</span>
         <h3>Goyo Acevedo</h3>
-        <p class="tag">Peinado y maquillaje<br><em>Se desplaza a tu alojamiento</em></p>
+        <p class="tag">Peinado y maquillaje<br><em>Va a su hotel</em></p>
         <div class="acts">
           <a class="link" href="https://wa.me/34619893449" target="_blank" rel="noopener">WhatsApp</a>
           <a class="link" href="tel:+34619893449">Llamar</a>
@@ -609,10 +622,10 @@ footer .tiny{margin-top:60px;font-size:11px;letter-spacing:.2em;text-transform:u
         <p class="eyebrow rv">Recomendaciones</p>
         <h2 class="rv d1">La ruta de <em>Nicole y Esteban</em></h2>
       </div>
-      <p class="lead rv d2">Si os quedáis unos días en Madrid, os dejamos nuestros sitios: los de las primeras citas, los de siempre y los que nos han visto crecer como familia.</p>
+      <p class="lead rv d2">Si se quedan unos días en Madrid, les compartimos nuestros lugares favoritos: los de las primeras citas, los de siempre y los que nos han visto crecer como pareja.</p>
     </div>
     <ol class="stops" id="stops"></ol>
-    <p class="route-note rv">Toca cualquier sitio para abrirlo en Google Maps.</p>
+    <p class="route-note rv">Toque cualquier lugar para abrirlo en Google Maps.</p>
   </div>
 </section>
 
@@ -620,16 +633,11 @@ footer .tiny{margin-top:60px;font-size:11px;letter-spacing:.2em;text-transform:u
   <div class="wrap">
     <p class="eyebrow rv">Regalos</p>
     <h2 class="rv d1">Tu presencia, <em>nuestro mayor regalo</em></h2>
-    <p class="lead rv d2">Que estés con nosotros ese día es, sin duda, el mayor regalo que podríamos recibir. Si aun así deseas tener un detalle con nosotros, te dejamos aquí los datos.</p>
+    <p class="lead rv d2">Que nos acompañen ese día es, sin duda, el mejor regalo que podríamos recibir. Si aun así desean tener un detalle con nosotros, aquí les dejamos nuestros datos.</p>
     <div class="gift-cards">
-      <div class="gcard rv">
-        <span class="eyebrow">Lista de bodas</span>
-        <h3>El Corte Inglés</h3>
-        <p class="soon">Próximamente</p>
-      </div>
-      <div class="gcard bank rv d1">
-        <span class="eyebrow">Cuenta de los novios</span>
-        <div class="bank-row"><div><small>Titular</small><span id="bank-holder">Nicole Medina y Esteban Carrillo</span></div></div>
+      <div class="gcard bank rv">
+        <span class="eyebrow">Datos bancarios</span>
+        <div class="bank-row"><div><small>Titular</small><span id="bank-holder">Nicole Medina McGowan</span></div></div>
         <div class="bank-row"><div><small>IBAN</small><span>ES48 1583 0001 1390 5846 6678</span></div><button class="copy" data-copy="ES4815830001139058466678">Copiar</button></div>
         <div class="bank-row"><div><small>SWIFT / BIC</small><span>REVOESM2</span></div><button class="copy" data-copy="REVOESM2">Copiar</button></div>
         <div class="bank-row"><div><small>Banco</small><span>Revolut Bank UAB, Sucursal en España</span></div></div>
@@ -638,11 +646,11 @@ footer .tiny{margin-top:60px;font-size:11px;letter-spacing:.2em;text-transform:u
         <div class="bank-row"><div><small>Concepto sugerido</small><span>Regalo boda Nicole y Esteban</span></div></div>
         <button class="btn copy-all" type="button" data-copy-all>Copiar todos los datos</button>
         <details class="intl">
-          <summary>¿Envías desde México u otro país?</summary>
+          <summary>¿Envía desde México u otro país?</summary>
           <ul>
-            <li>Haz una <strong>transferencia internacional (SWIFT)</strong> con el IBAN y el código SWIFT/BIC de arriba. El país del banco es <strong>España</strong>.</li>
-            <li>Si tu banco lo permite, envía en <strong>euros (EUR)</strong>; así evitas una doble conversión de moneda.</li>
-            <li>Si te dan a elegir quién paga las comisiones, la opción <strong>«OUR»</strong> hace que nos llegue el importe completo.</li>
+            <li>Haga una <strong>transferencia internacional (SWIFT)</strong> con el IBAN y el código SWIFT/BIC de arriba. El país del banco es <strong>España</strong>.</li>
+            <li>Si su banco lo permite, envíe en <strong>euros (EUR)</strong>; así evita una doble conversión de moneda.</li>
+            <li>Si le dan a elegir quién paga las comisiones, la opción <strong>«OUR»</strong> hace que nos llegue el monto completo.</li>
             <li>Servicios como <strong>Revolut</strong> o <strong>Wise</strong> suelen ser más rápidos y baratos que una transferencia bancaria tradicional.</li>
           </ul>
         </details>
@@ -655,15 +663,14 @@ footer .tiny{margin-top:60px;font-size:11px;letter-spacing:.2em;text-transform:u
   <div class="wrap">
     <p class="big">Nicole <em>&amp;</em> Esteban</p>
     <p class="when">17 · 04 · 2027 — Madrid</p>
-    <p class="nico">…y Nico, que nos lo ha puesto todo patas arriba de la mejor manera.</p>
-    <p class="tiny">Con muchas ganas de celebrarlo con vosotros</p>
+    <p class="tiny">Con muchas ganas de celebrar con ustedes</p>
   </div>
 </footer>
 
 <div class="sheet" id="cal-sheet" aria-hidden="true">
   <div class="sheet-bg" data-close></div>
   <div class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="cal-title">
-    <p class="eyebrow">Añadir al calendario</p>
+    <p class="eyebrow">Agregar al calendario</p>
     <h3 id="cal-title">Misa</h3>
     <div class="sheet-opts">
       <a id="cal-apple" class="sheet-opt" href="#"><span>Calendario de Apple</span><i>→</i></a>
@@ -673,7 +680,7 @@ footer .tiny{margin-top:60px;font-size:11px;letter-spacing:.2em;text-transform:u
     <button class="sheet-close" type="button" data-close>Cerrar</button>
   </div>
 </div>
-<a href="#confirmar" class="cta-m" id="cta-m" aria-label="Confirmar asistencia"><span>¿Vienes a la boda?</span><em>Confirmar</em></a>
+<a href="#confirmar" class="cta-m" id="cta-m" aria-label="Confirmar asistencia"><span>¿Nos acompaña?</span><em>Confirmar</em></a>
 <div class="toast" id="toast">Copiado</div>
 
 <script>
@@ -682,7 +689,7 @@ footer .tiny{margin-top:60px;font-size:11px;letter-spacing:.2em;text-transform:u
    1. Crea el Google Form con las mismas preguntas.
    2. Copia aquí la URL ".../formResponse" y los "entry.XXXX".
    Las opciones del Form deben coincidir EXACTAMENTE con:
-   "Sí, allí estaré" / "No podré ir" y "Sí" / "No".
+   "Sí, ahí estaré" / "No podré ir" y "Sí" / "No".
    ============================================================ */
 const GOOGLE_FORM = {
   action: '', // p.ej. 'https://docs.google.com/forms/d/e/XXXXXXXX/formResponse'
@@ -801,7 +808,7 @@ async function doCopy(b,v,okLabel){
   if(copySync(v)){setBtn(b,okLabel,'ok');showToast('Copiado al portapapeles');return}
   setBtn(b,'Copiando…');
   if(await copyAsync(v)){setBtn(b,okLabel,'ok');showToast('Copiado al portapapeles');return}
-  setBtn(b,'Mantén pulsado','fail');selectVisible(b);showToast('Mantén pulsado el texto para copiarlo');
+  setBtn(b,'Copie a mano','fail');selectVisible(b);showToast('Mantenga presionado el texto para copiarlo');
 }
 document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();doCopy(b,b.dataset.copy.replace(/\s/g,''),'¡Copiado!')}));
 document.querySelectorAll('[data-copy-all]').forEach(b=>b.addEventListener('click',e=>{
@@ -843,18 +850,18 @@ form.addEventListener('submit',e=>{
   e.preventDefault();
   const fd=new FormData(form);
   const nombre=(fd.get('nombre')||'').trim(),email=(fd.get('email')||'').trim();
-  if(!nombre){msg.textContent='Por favor, dinos tu nombre.';return}
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){msg.textContent='Revisa tu email, por favor.';return}
-  for(const k of ['boda','rompehielos','acompanante']) if(!fd.get(k)){msg.textContent='Por favor, responde a todas las preguntas.';return}
-  if(fd.get('acompanante')==='Sí'&&!(fd.get('nombreAcompanante')||'').trim()){msg.textContent='Dinos el nombre de tu acompañante.';return}
+  if(!nombre){msg.textContent='Por favor, escriba su nombre.';return}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){msg.textContent='Por favor, revise su correo electrónico.';return}
+  for(const k of ['boda','rompehielos','acompanante']) if(!fd.get(k)){msg.textContent='Por favor, responda todas las preguntas.';return}
+  if(fd.get('acompanante')==='Sí'&&!(fd.get('nombreAcompanante')||'').trim()){msg.textContent='Por favor, escriba el nombre de su acompañante.';return}
   msg.textContent='';
 
   const done=()=>{
     form.style.display='none';ctaHidden=true;upd();
     document.getElementById('thanks').style.display='block';
-    document.getElementById('thanks-text').textContent = fd.get('boda')==='Sí, allí estaré'
-      ? `Qué ilusión, ${nombre.split(' ')[0]}. ¡Nos vemos el 17 de abril!`
-      : `Gracias por avisarnos, ${nombre.split(' ')[0]}. Te echaremos de menos.`;
+    document.getElementById('thanks-text').textContent = fd.get('boda')==='Sí, ahí estaré'
+      ? `¡Qué emoción, ${nombre.split(' ')[0]}! Nos vemos el 17 de abril.`
+      : `Gracias por avisarnos, ${nombre.split(' ')[0]}. Lamentamos mucho que no pueda acompañarnos.`;
   };
   if(!GOOGLE_FORM.action){console.warn('Google Form sin configurar');done();return}
 
