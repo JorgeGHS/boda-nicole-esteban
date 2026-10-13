@@ -153,6 +153,7 @@ fieldset{border:0}
 .plusone.show{display:block;animation:fade .4s}
 @keyframes fade{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 .rsvp .btn{border-color:var(--paper);color:var(--paper);justify-self:start}
+.rsvp .btn:disabled{opacity:.6;cursor:wait}
 @media (hover:hover){.rsvp .btn:hover{background:var(--paper);color:var(--cafe)}}
 .form-msg{font-family:var(--serif);font-style:italic;font-size:20px;min-height:1em}
 .thanks{display:none;padding:40px 0}
@@ -533,7 +534,6 @@ footer .tiny{margin-top:60px;font-size:11px;letter-spacing:.2em;text-transform:u
         <h3>¡Gracias!</h3>
         <p class="lead" id="thanks-text">Recibimos su confirmación.</p>
       </div>
-      <iframe name="gform-target" id="gform-target" title="envío" style="display:none"></iframe>
     </div>
   </div>
 </section>
@@ -685,23 +685,11 @@ footer .tiny{margin-top:60px;font-size:11px;letter-spacing:.2em;text-transform:u
 
 <script>
 /* ============================================================
-   CONFIGURACIÓN DEL FORMULARIO (Google Forms)
-   1. Crea el Google Form con las mismas preguntas.
-   2. Copia aquí la URL ".../formResponse" y los "entry.XXXX".
-   Las opciones del Form deben coincidir EXACTAMENTE con:
-   "Sí, ahí estaré" / "No podré ir" y "Sí" / "No".
+   FORMULARIO → GOOGLE SHEET (Google Apps Script, como en Lola y Fer)
+   Pega aquí la URL de la "Aplicación web" de Apps Script (termina en /exec).
+   Si se deja vacía, la web muestra el "¡Gracias!" pero NO guarda nada.
    ============================================================ */
-const GOOGLE_FORM = {
-  action: '', // p.ej. 'https://docs.google.com/forms/d/e/XXXXXXXX/formResponse'
-  fields: {
-    nombre:            'entry.0000000001',
-    email:             'entry.0000000002',
-    boda:              'entry.0000000003',
-    rompehielos:       'entry.0000000004',
-    acompanante:       'entry.0000000005',
-    nombreAcompanante: 'entry.0000000006'
-  }
-};
+const FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbwbtwlmaQo2Zl-Q9F8pKVuPsPqCmodONs8H31xZJItLwQ65XQqip7qAFYAwcATVe4pXcw/exec";
 
 const STOPS = [
   ['Sal Mestiza','Donde todo empezó y nos conocimos'],
@@ -863,15 +851,25 @@ form.addEventListener('submit',e=>{
       ? `¡Qué emoción, ${nombre.split(' ')[0]}! Nos vemos el 17 de abril.`
       : `Gracias por avisarnos, ${nombre.split(' ')[0]}. Lamentamos mucho que no pueda acompañarnos.`;
   };
-  if(!GOOGLE_FORM.action){console.warn('Google Form sin configurar');done();return}
+  const payload={
+    nombre,
+    email,
+    asiste_boda: fd.get('boda')||'',
+    asiste_rompehielos: fd.get('rompehielos')||'',
+    trae_acompanante: fd.get('acompanante')||'',
+    nombre_acompanante: fd.get('acompanante')==='Sí' ? (fd.get('nombreAcompanante')||'').trim() : ''
+  };
+  if(!FORM_ENDPOINT){console.warn('FORM_ENDPOINT sin configurar: no se guarda la respuesta');done();return}
 
-  // Envío oculto a Google Forms
-  const f=document.createElement('form');f.method='POST';f.action=GOOGLE_FORM.action;f.target='gform-target';f.style.display='none';
-  for(const [k,entry] of Object.entries(GOOGLE_FORM.fields)){
-    const i=document.createElement('input');i.type='hidden';i.name=entry;i.value=(fd.get(k)||'').toString().trim();f.appendChild(i);
-  }
-  document.body.appendChild(f);f.submit();setTimeout(()=>f.remove(),2000);
-  done();
+  const btn=form.querySelector('button[type=submit]');
+  btn.disabled=true;btn.textContent='Enviando…';
+  fetch(FORM_ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)})
+    .then(done)
+    .catch(err=>{
+      console.error('Error enviando el formulario',err);
+      btn.disabled=false;btn.textContent='Enviar confirmación';
+      msg.textContent='No pudimos enviar su confirmación. Revise su conexión e inténtelo de nuevo.';
+    });
 });
 </script>
 </body>
